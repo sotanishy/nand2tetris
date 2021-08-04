@@ -61,24 +61,14 @@ CHIP CPU {
         out=res, out=outM, zr=zr, ng=ng);
 
     // jump
-    Not(in=j1, out=n1);
-    Not(in=j2, out=n2);
-    Not(in=j3, out=n3);
     Not(in=zr, out=nz);
     Not(in=ng, out=nn);
     And(a=nz, b=nn, out=ps);
-    Or(a=zr, b=ng, out=np);
-
-    And8Way(in[0]=n1, in[1]=n2, in[2]=j3, in[3]=ps, in[4..7]=true, out=jgt);
-    And8Way(in[0]=n1, in[1]=j2, in[2]=n3, in[3]=zr, in[4..7]=true, out=jeq);
-    And8Way(in[0]=n1, in[1]=j2, in[2]=j3, in[3]=nn, in[4..7]=true, out=jge);
-    And8Way(in[0]=j1, in[1]=n2, in[2]=n3, in[3]=ng, in[4..7]=true, out=jlt);
-    And8Way(in[0]=j1, in[1]=n2, in[2]=j3, in[3]=nz, in[4..7]=true, out=jne);
-    And8Way(in[0]=j1, in[1]=j2, in[2]=n3, in[3]=np, in[4..7]=true, out=jle);
-    And8Way(in[0]=j1, in[1]=j2, in[2]=j3, in[3]=true, in[4..7]=true, out=jmp);
-
-    Or8Way(in[0]=jgt, in[1]=jeq, in[2]=jge, in[3]=jlt, in[4]=jne,
-           in[5]=jle, in[6]=jmp, in[7]=false, out=loadPC0);
-    And(a=i, b=loadPC0, out=loadPC);
+    And(a=j1, b=ng, out=jng);
+    And(a=j2, b=zr, out=jzr);
+    And(a=j3, b=ps, out=jps);
+    Or(a=jng, b=jzr, out=jngzr);
+    Or(a=jngzr, b=jps, out=jmp);
+    And(a=i, b=jmp, out=loadPC);
     PC(in=A, load=loadPC, inc=true, reset=reset, out[0..14]=pc);
 }
