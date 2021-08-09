@@ -1,3 +1,6 @@
+@enum CommandType a_command l_command c_command
+
+
 # given an input file, return a list of commands without comments and whitespaces
 function readcommands(path::String)::Vector{String}
     commands = []
@@ -23,21 +26,21 @@ end
 
 
 # get the type of the given command
-function commandtype(command::String)::String
+function commandtype(command::String)::CommandType
     if command[1] == '@'
-        "A_COMMAND"
+        a_command
     elseif command[1] == '('
-        "L_COMMAND"
+        l_command
     else
-        "C_COMMAND"
+        c_command
     end
 end
 
 
 # get the symbol of the given command
-# the command should be of either A_COMMAND or L_COMMAND
+# the command should be of either a_command or l_command
 function symbol(command::String)::String
-    if commandtype(command) == "A_COMMAND"
+    if commandtype(command) == a_command
         command[2:end]
     else
         command[2:end-1]
@@ -46,7 +49,7 @@ end
 
 
 # get the dest part of the given command
-# the command should be of C_COMMAND
+# the command should be of c_command
 function dest(command::String)::String
     i = findfirst(isequal('='), command)
     if isnothing(i)
@@ -158,7 +161,7 @@ function main()
         # associate labels with addresses
         address = 0
         for command in commands
-            if commandtype(command) == "L_COMMAND"
+            if commandtype(command) == l_command
                 symbols[symbol(command)] = address
             else
                 address += 1
@@ -169,8 +172,8 @@ function main()
         address::UInt16 = 16
         for command in commands
             type = commandtype(command)
-            type == "L_COMMAND" && continue
-            if type == "A_COMMAND"
+            type == l_command && continue
+            if type == a_command
                 s = symbol(command)
                 bin = if isdigit(s[1])
                     parse(UInt16, s)
