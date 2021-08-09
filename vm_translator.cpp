@@ -135,8 +135,6 @@ public:
         outfile << "@SP\n";
         outfile << "M=D\n";
         writeCall("Sys.init", 0);
-        // outfile << "@Sys.init\n";
-        // outfile << "0;JMP\n";
     }
 
     void writeArithmetic(std::string command) {
