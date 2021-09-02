@@ -426,11 +426,8 @@ function compileterm(engine::CompilationEngine)
 
         if tokentype(engine.tok) == t_symbol && symbol(engine.tok) == '['
             # varName [ expression ]
-            # [
             advance!(engine.tok)
-            # expression
             compileexpression(engine)
-            # ]
             advance!(engine.tok)
 
             segment, index = getsegmentandindex(engine, name)
