@@ -199,6 +199,7 @@ class Output {
         let left = col * width;
         do Screen.setColor(false);
         do Screen.drawRectangle(left, top, left + width - 1, top + height - 1);
+        do Screen.setColor(true);
         return;
     }
 
@@ -207,6 +208,14 @@ class Output {
     function void printChar(char c) {
         var Array charMap;
         var int top, left, k, l, bit;
+        if (c = String.backSpace()) {
+            do Output.backSpace();
+            return;
+        }
+        if (c = String.newLine()) {
+            do Output.println();
+            return;
+        }
         let charMap = Output.getMap(c);
         let top = row * height;
         let left = col * width;

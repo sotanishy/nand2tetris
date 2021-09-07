@@ -18,6 +18,11 @@ class String {
     /** constructs a new empty string with a maximum length of maxLength
      *  and initial length of 0. */
     constructor String new(int maxLength) {
+        if (~(maxLength > 0)) {
+            // maxLength must be positive
+            do Sys.error(14);
+            return this;
+        }
         let len = 0;
         let maxlen = maxLength;
         if (maxLength > 0) {
@@ -41,17 +46,32 @@ class String {
 
     /** Returns the character at the j-th location of this string. */
     method char charAt(int j) {
+        if ((j < 0) | ~(j < len)) {
+            // index out of bounds
+            do Sys.error(15);
+            return -1;
+        }
         return str[j];
     }
 
     /** Sets the character at the j-th location of this string to c. */
     method void setCharAt(int j, char c) {
+        if ((j < 0) | ~(j < len)) {
+            // index out of bounds
+            do Sys.error(16);
+            return;
+        }
         let str[j] = c;
         return;
     }
 
     /** Appends c to this string's end and returns this string. */
     method String appendChar(char c) {
+        if (len = maxlen) {
+            // string full
+            do Sys.error(17);
+            return -1;
+        }
         let str[len] = c;
         let len = len + 1;
         return this;
@@ -59,6 +79,11 @@ class String {
 
     /** Erases the last character from this string. */
     method void eraseLastChar() {
+        if (len = 0) {
+            // string empty
+            do Sys.error(18);
+            return;
+        }
         let len = len - 1;
         return;
     }
@@ -96,12 +121,22 @@ class String {
             let neg = true;
         }
         while (val > 0) {
+            if (len = maxlen) {
+                // string full
+                do Sys.error(19);
+                return;
+            }
             let q = val / 10;
             let str[len] = val - (10 * q) + 48;
             let val = q;
             let len = len + 1;
         }
         if (neg) {
+            if (len = maxlen) {
+                // string full
+                do Sys.error(19);
+                return;
+            }
             let str[len] = 45;
             let len = len + 1;
         }

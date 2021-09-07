@@ -16,9 +16,10 @@ class Memory {
     /** Initializes the class. */
     function void init() {
         let memory = 0;
-        memory[0] = 16384 - 2048;
-        memory[1] = -1;
-        let last = 0;
+        let memory[2048] = 16384 - 2048;
+        let memory[2049] = -1;
+        let last = 2048;
+        return;
     }
 
     /** Returns the RAM value at the given address. */
@@ -35,27 +36,24 @@ class Memory {
     /** Finds an available RAM block of the given size and returns
      *  a reference to its base address. */
     function int alloc(int size) {
-        var int prev, cur, block;
+        var int cur, idx;
         if (~(size > 0)) {
             do Sys.error(5);  // size must be positive
             return -1;
         }
-        let prev = -1;
-        let cur = 0;
-        while (~(memory[cur] > size)) {
-            let prev = cur;
+        let cur = 2048;
+        while (memory[cur] < size + 3) {
             let cur = memory[cur + 1];
             if (cur = -1) {
                 do Sys.error(6);  // heap overflow
                 return -1;
             }
         }
-        let memory[prev + 1] = memory[cur + 1];
-        let memory[last + 1] = cur + size + 1;
-        let last = cur + size + 1;
-        let memory[last] = memory[cur] - size - 1;
-        let memory[cur] = size + 1;
-        return cur + 1;
+        let idx = cur + memory[cur] - size - 1;
+        let memory[cur] = idx - cur;
+        let memory[idx] = size + 1;
+
+        return idx + 1;
     }
 
     /** De-allocates the given object (cast as an array) by making

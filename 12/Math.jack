@@ -61,6 +61,10 @@ class Math {
      */
     function int divide(int x, int y) {
         var int q;
+        if (y = 0) {
+            do Sys.error(3);  // zero division
+            return -1;
+        }
         if ((x < 0) & (y < 0)) {
             return Math.divide(-x, -y);
         }
@@ -74,7 +78,14 @@ class Math {
         if (y > x) {
             return 0;
         }
-        let q = Math.divide(x, 2 * y);
+        if (2 * y > 0) {
+            let q = Math.divide(x, 2 * y);
+        }
+        else {
+            // overflow
+            let q = 0;
+        }
+
         if (x - (2 * q * y) < y) {
             return 2 * q;
         }
@@ -86,6 +97,10 @@ class Math {
     /** Returns the integer part of the square root of x. */
     function int sqrt(int x) {
         var int y, i, tmp;
+        if (x < 0) {
+            do Sys.error(4);  // sqrt of negative number
+            return -1;
+        }
         let y = 0;
         let i = 7;
         while (~(i < 0)) {
